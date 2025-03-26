@@ -47,6 +47,40 @@ class BankingApp {
                                     break;
                                 }
                             }
+
+                            account_number = accounts.get_account_number(email);
+                            int choice2 = 0;
+                            while (choice2 != 5) {
+                                System.out.println();
+                                System.out.println("1. Debit Money");
+                                System.out.println("2. Credit Money");
+                                System.out.println("3. Transfer Money");
+                                System.out.println("4. Check Balance");
+                                System.out.println("5. Log Out");
+                                System.out.println("Enter your chioce : ");
+
+                                choice2 = sc.nextInt();
+                                switch (choice2) {
+                                    case 1:
+                                        accountManager.debit_maney(account_number);
+                                        break;
+                                    case 2:
+                                        accountManager.creadit_many(account_number);
+                                        break;
+                                    case 3:
+                                        accountManager.transfer_money(account_number);
+                                        break;
+                                    case 4:
+                                        accountManager.getBalance(account_number);
+                                        break;
+                                    case 5:
+                                        break;
+                                
+                                    default:
+                                        System.out.println("Enter the valid choice");
+                                        break;
+                                }
+                            }
                         }
                         else {
                             System.out.println("Login failed");

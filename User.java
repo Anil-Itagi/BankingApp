@@ -52,7 +52,7 @@ public class User {
     public  boolean user_exist(String email) {
         String query="select * from user where email=?";
         try {
-               PreparedStatement preparedStatement=conn.prepareStatement(query)
+            PreparedStatement preparedStatement = conn.prepareStatement(query);
                preparedStatement.setString(1,email);
                ResultSet res=preparedStatement.executeQuery();
                return res.next(); 

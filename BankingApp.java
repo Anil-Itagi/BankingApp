@@ -52,13 +52,19 @@ class BankingApp {
                             System.out.println("Login failed");
                         }
                 
-                case 3 :
+                    case 3:
+                        System.out.println("THANK YOU FOR USING BANKING SYSTEM");
+                        System.out.println("Exiting System");
+                        return;
                         
+                    default:
+                        System.out.println("Enter the valid choice");
+                        break;
 
                 }
             }
         } catch (Exception e) {
-             
+             e.printStackTrace();
         }
     }
     

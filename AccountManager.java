@@ -121,12 +121,74 @@ public class AccountManager {
             if (res.next()) {
                 double balance = res.getDouble("balance");
                 System.out.println("Balance is : " + balance);
-            }
-            else {
+            } else {
                 System.out.println("Invalid Pin !!");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+
+    public void transfer_money(long sender_account_number) throws SQLException {
+        sc.nextLine();
+        System.out.print("Enter the receiver account number : ");
+        long receiver_account_number = sc.nextLong();
+        System.out.print("Enter the amount to transfer : ");
+        double amount = sc.nextDouble();
+        System.out.print("Enter the security pin : ");
+        String security_pin = sc.nextLine();
+
+        try {
+            conn.setAutoCommit(false);
+            if (sender_account_number != 0 && receiver_account_number != 0) {
+                PreparedStatement ps = conn
+                        .prepareStatement("select * from accounts where account_number =? and security_pin=?");
+                ps.setLong(1, sender_account_number);
+                ps.setString(2, security_pin);
+                ResultSet res = ps.executeQuery();
+                if (res.next()) {
+
+                    double current_balance = res.getDouble("balance");
+                    if (current_balance >= amount) {
+                        String debit_query = "update accounts set balance=balance -? where account_number=?";
+                        String credit_query = "update accounts set balance=balance+ ? where account_number= ?";
+
+                        PreparedStatement ps1 = conn.prepareStatement(debit_query);
+                        PreparedStatement ps2 = conn.prepareStatement(credit_query);
+
+                        ps1.setDouble(1, amount);
+                        ps1.setLong(2, sender_account_number);
+
+                        int affectedRows1 = ps1.executeUpdate();
+
+                        ps2.setDouble(1, amount);
+                        ps2.setLong(2, receiver_account_number);
+
+                        int affectedRows2 = ps2.executeUpdate();
+
+                        if (affectedRows1 > 0 && affectedRows2 > 0) {
+                            System.out.println("Rs " + amount + " Transfer successfull");
+                            conn.commit();
+                            conn.setAutoCommit(true);
+
+                        } else {
+                            System.out.println("Something went wrong at Transfering the money");
+                            conn.rollback();
+                            conn.setAutoCommit(true);
+                        }
+                    }
+                } else {
+                    System.out.println("Invalid Security pin");
+                }
+                
+            } else {
+                System.out.println("Invalid account number");
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        conn.setAutoCommit(true);
     }
 }

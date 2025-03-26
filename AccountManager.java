@@ -19,9 +19,13 @@ public class AccountManager {
         System.out.print("Enter Amount : ");
         double amount = sc.nextDouble();
         sc.nextLine();
+
         
         System.out.print("Enter the security pin ");
         String security_pin = sc.nextLine();
+
+
+        System.out.println("Account number is "+ account_number);
 
         try {
             conn.setAutoCommit(false);
@@ -34,20 +38,22 @@ public class AccountManager {
                 if (res.next()) {
                     String credit_query = "Update accounts set balance=balance+ ? where account_number=?";
                     PreparedStatement ps1 = conn.prepareStatement(credit_query);
-                    long accountNumber=res.getLong("account_number");
+                    long accountNumber = res.getLong("account_number");
                     ps1.setDouble(1, amount);
                     ps1.setLong(2, accountNumber);
                     int affectedRows = ps1.executeUpdate();
                     if (affectedRows > 0) {
-                        System.out.println("Rs "+amount+"Amount credited succssfully");
+                        System.out.println("Rs " + amount + "Amount credited succssfully");
                         conn.commit();
                         conn.setAutoCommit(true);
-                    }
-                    else {
+                    } else {
                         System.out.println("Amount credit failed");
                         conn.rollback();
                         conn.setAutoCommit(true);
                     }
+                }
+                else {
+                    System.out.println("Wrong security pin");
                 }
             }
         } catch (Exception e) {
@@ -137,7 +143,7 @@ public class AccountManager {
         System.out.print("Enter the amount to transfer : ");
         double amount = sc.nextDouble();
         System.out.print("Enter the security pin : ");
-        String security_pin = sc.nextLine();
+        String security_pin = sc.next();
 
         try {
             conn.setAutoCommit(false);

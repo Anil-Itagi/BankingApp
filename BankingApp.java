@@ -49,6 +49,8 @@ class BankingApp {
                             }
 
                             account_number = accounts.get_account_number(email);
+                            System.out.println("account number is" + account_number);
+                            
                             int choice2 = 0;
                             while (choice2 != 5) {
                                 System.out.println();

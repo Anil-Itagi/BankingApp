@@ -20,7 +20,7 @@ public class Accounts {
             String query = "insert into accounts(full_name ,email,balance , security_pin) values (?,?,?,?)";
 
             System.out.print("Enter the Full Name : ");
-            String fullName = sc.nextLine();
+            String fullName = sc.next();
             // System.out.print("Enter the Email : ");
             // String email = sc.nextLine();
 
@@ -28,20 +28,15 @@ public class Accounts {
             double balance = sc.nextDouble();
 
             System.out.print("Enter the 4 Digit security_pin :");
-            char[] security_pin = new char[4];
-            for (int i = 0; i < 4; i++) {
-                security_pin[i] = sc.next().charAt(i);
-            }
-
-            String s_pin = new String(security_pin);
-
+            String security_pin = sc.next();
+         
             try {
                 PreparedStatement ps = conn.prepareStatement(query);
 
                 ps.setString(1, fullName);
                 ps.setString(2, email);
                 ps.setDouble(3, balance);
-                ps.setString(4, s_pin);
+                ps.setString(4, security_pin);
 
                 int affectedRows = ps.executeUpdate();
                 if (affectedRows > 0) {
@@ -82,13 +77,24 @@ public class Accounts {
 
     public long get_account_number(String email) {
 
+
+        System.out.println("Email from "+ email);
         String query = "select account_number from accounts where email= ?;";
         try {
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1, email);
             ResultSet res = ps.executeQuery();
-            return res.getLong("account_number");
+            if (res.next()) {
+
+                long accountNumber = res.getLong("account_number");
+                return accountNumber;
+            }
+            else {
+                System.out.println("Email is not valid");
+                return 0;
+            }
         } catch (Exception e) {
+            System.out.println("error"+e.getMessage());
             return 0;
         }
 

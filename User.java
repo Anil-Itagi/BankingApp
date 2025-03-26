@@ -69,7 +69,7 @@ public class User {
         String email = sc.nextLine();
         System.out.println("Password");
         String password = sc.nextLine();
-        String query = "select * from accounts where email=? and password=?";
+        String query = "select * from user where email=? and password=?";
         try {
 
             PreparedStatement ps = conn.prepareStatement(query);
@@ -77,13 +77,14 @@ public class User {
             ps.setString(2, password);
             ResultSet res = ps.executeQuery();
             if (res.next()) {
+                // System.out.println(res+" login successful in login method");
                 return email;
             } else {
                 return null;
             }
 
         } catch (Exception e) {
-            System.out.println("Login successfull");
+            System.out.println("Login successfull"+e.getMessage());
         }
         return null;
 
